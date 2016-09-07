@@ -3,7 +3,7 @@
 	import flash.external.ExternalInterface;
 	import Recorder;
 	
-	public class Api {
+	public class RecorderApi {
 			var recorder:Recorder;
 
 		public function Api(recorder:Recorder):Void {

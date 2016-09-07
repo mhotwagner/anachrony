@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Can we Start?</title>
+</head>
+<body>
+    <div id="flashContainer">
+
+    </div>
+    <button id="startButton">Begin Recording</button>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+<script>
+    flashVars = {};
+    params = {
+        allowScriptAccess: true
+    }
+    attrs = {
+        id: 'recorderSWF'
+    }
+    $(function() {
+        embeddedSWF = swfobject.embedSWF(
+                "../src/flash/anachrony.swf",
+                "flashContainer",
+                "300",
+                "300",
+                "10.0.0",
+                false,
+                flashVars,
+                params,
+                attrs
+        );
+
+        $('#startButton').on('click', startRecording);
+    });
+
+    function startRecording() {
+        console.log('attempting to start recording...');
+        recorder = document.getElementById('recorderSWF');
+        console.log(recorder);
+
+        recorder.flashRecorderStart();
+
+    }
+
+    function recorderStatus(e) {
+        console.log(e);
+    }
+    function flashLog(message) {
+        console.log('FLASH_MESSAGE: ' + message)
+    }
+</script>
+</html>
