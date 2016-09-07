@@ -17,10 +17,10 @@
         </div>
 
         <div class="progress">
-            <div class="progress-bar" style="width:70%"></div>
+            <div class="progress-bar" style="width:0%"></div>
         </div>
 
-        <button id="startButton">Begin Recording</button>
+        <button id="startButton">Activate Microphone</button>
     </div>
 </body>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -49,15 +49,15 @@
                 attrs
         );
 
-        $('#startButton').on('click', startRecording);
+        $('#startButton').on('click', startListening);
     });
 
-    function startRecording() {
+    function startListening() {
         console.log('attempting to start recording...');
         recorder = document.getElementById('recorderSWF');
         console.log(recorder);
 
-        recorder.flashRecorderStart();
+        recorder.jsFlashRecorderInitialize();
 
     }
 

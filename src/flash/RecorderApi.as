@@ -18,20 +18,26 @@
 		}
 		
 		private function onEnterFrame(e:Event):void {
-			ExternalInterface.call('flashLog', '<RecorderApi>: ENTER_FRAME)');
-			if (recorder.isRecording()) {
-				ExternalInterface.call('flashLog', '<Recorder>: Recording!');
+			//ExternalInterface.call('flashLog', '<RecorderApi>: ENTER_FRAME)');
+			if (recorder.isListening()) {
+				//ExternalInterface.call('flashLog', '<Recorder>: Recording!');
 				jsUpdateRecorderStatus();
 			}
 		}
 			
 		private function registerListenersAndHandlers():void {
-			ExternalInterface.addCallback("flashRecorderStart", startRecorder);
+			ExternalInterface.addCallback("jsFlashRecorderStart", startRecorder);
+			ExternalInterface.addCallback("jsFlashRecorderInitialize", initRecorder);
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			//trace('whatever')
 		}
 		
 		// JS Hooks into Recorder
+		
+		function initRecorder():void {
+			recorder.init();
+			ExternalInterface.call("flashLog", '<RecorderApi>: calling recorder.init()');
+		}
 		
 		function startRecorder():void {
 			recorder.start();

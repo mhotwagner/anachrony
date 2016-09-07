@@ -15,6 +15,7 @@
 		var recorderApi:RecorderApi;
 
 		public function Main() {
+			ExternalInterface.call('flashLog', '<RecorderApplication> Initializing...');
 			recorderApi = new RecorderApi(recorder);
 		}
 		
