@@ -53,7 +53,7 @@
 		function jsUpdateRecorderStatus():void {
 			var data:Object = {'activityLevel': recorder.getStatus()};
 			trace(data);
-			ExternalInterface.call("recorderStatus", data);
+			ExternalInterface.call("flashRecorderStatus", data);
 		}
 		
 
