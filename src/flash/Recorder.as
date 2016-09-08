@@ -4,6 +4,7 @@
 	import flash.media.SoundMixer;
 	import flash.media.SoundTransform;
 	import flash.system.Security;
+	import flash.system.SecurityPanel;
 	import org.bytearray.micrecorder.*;
 	import org.bytearray.micrecorder.events.RecordingEvent;
 	import org.bytearray.micrecorder.encoder.WaveEncoder;
@@ -11,93 +12,83 @@
 	import flash.events.ActivityEvent;
 	import flash.net.FileReference;	
 	import flash.external.ExternalInterface;
+	import flash.events.StatusEvent;
+    import flash.media.Microphone;
+	
 	public class Recorder extends Sprite {
 		
-		private var initialized:Boolean = false;
-		private var listening:Boolean = false;
+		private var muted:Boolean = true;
 		private var recording:Boolean = false;
 		private var mic:Microphone;
 		private var wavEncoder:WaveEncoder = new WaveEncoder();
 		private var recorder:MicRecorder = new MicRecorder(wavEncoder);
 		private var fileReference:FileReference = new FileReference();
 		
-		private var index:Number = 0;
-		
 		public function Recorder() {
-			ExternalInterface.call('flashLog', '<Recorder> Instantiating...');
-			trace('RECORDER instantiating...');
 			muteSpeakers();
+			
 			mic = Microphone.getMicrophone();
-			trace(mic);
-			//addListeners();
-		}
-		
-		public function init():void {
-			ExternalInterface.call('flashLog', '<Recorder> Initializing');
-			trace('RECORDER initializing...');
-			initialized = true;
 			mic.setSilenceLevel(0);
 			mic.gain = 100;
 			mic.setLoopBack(true);
 			mic.setUseEchoSuppression(true); 
 			
+			mic.addEventListener(StatusEvent.STATUS, this._statusHandler, false, 0, true);
+			
 			Security.showSettings("2");
-			listening = true;
 		}
 		
-		public function start():void {
-			if (!initialized) {
-				init();
-			}
-			if (mic != null && !recording) {
-				ExternalInterface.call('flashLog', '<Recorder> Starting');
-				trace('RECORDER beginning capt†ture...');
+		public function getActivityLevel():Number {
+			return mic.activityLevel;
+		}
+		
+		public function isMuted():Boolean {
+			return muted;
+		}
+		
+		/*public function start():void {
+			if (!recording) {
 				recording = true;
 				recorder.record();
 			}
-		}
+		}*/
 		
-		public function stop():void {
+		/*public function stop():void {
 			if (recording) {
 				recording = false;
-				ExternalInterface.call('flashLog', '<Recorder> Stopping');
-				trace('RECORDER completing capture...');
 				recorder.stop();
 				mic.setLoopBack(false);
 				save();
 			}
-		}
+		}*/
 		
-		public function getStatus():Number {
-			if (!initialized) {
-				init();
-			}
-			ExternalInterface.call('flashLog', '<Recorder> Reporting Status { activityLevel: ' + mic.activityLevel.toString() + '}');
-			trace('trying to call this?');
-			return mic.activityLevel;
-		}
-		
-		public function save(filename:String = 'recording'):void {
-			ExternalInterface.call('flashLog', '<Recorder> Saving');
-			trace('RECORDER saving audio to file...');
+		/*public function save(filename:String = 'recording'):void {
 			fileReference.save(recorder.output, filename + '.wav');
-		}
+		}*/
 		
-		public function isRecording():Boolean {
+		/*public function isRecording():Boolean {
 			return recording;
+		}*/
+		
+		private function _statusHandler(e:StatusEvent):void {
+			if (e.code == "Microphone.Unmuted"){
+				muted = false;
+				mic.removeEventListener(StatusEvent.STATUS, this._statusHandler);
+				dispatchEvent(new Event('Recorder.Enabled', true));
+			} else if (e.code == "Microphone.Muted") {
+				muted = true;
+				mic.removeEventListener(StatusEvent.STATUS, this._statusHandler);
+				dispatchEvent(new Event('Recorder.Disabled', true));
+			}
 		}
 		
-		public function isListening():Boolean {
-			return listening;
-		}
-		
+		// We should try to get rid of this
 		private function muteSpeakers():void {
 			var transform1:SoundTransform=new SoundTransform();
 			transform1.volume=0; // goes from 0 to 1
 			flash.media.SoundMixer.soundTransform=transform1;
 		}
-
-
+		
 	}
 	
 }

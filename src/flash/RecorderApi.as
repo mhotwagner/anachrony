@@ -6,56 +6,41 @@
 	import Recorder;
 	
 	public class RecorderApi extends MovieClip {
+		
 		private var recorder:Recorder;
 
 		public function RecorderApi(recorder:Recorder):void {
-			// constructor code
 			this.recorder = recorder;
-			trace(recorder);
-			registerListenersAndHandlers();
-			//ExternalInterface.addCallback("recorderStop", stopRecorder);
+			registerEventListeners();
+			registerJavascriptCallbacks();
+		}
 			
+		function registerEventListeners():void {
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			recorder.addEventListener('Recorder.Enabled', onEnable);
+			recorder.addEventListener('Recorder.Disabled', onDisable);
 		}
 		
-		private function onEnterFrame(e:Event):void {
+		function registerJavascriptCallbacks():void {
+			//ExternalInterface.addCallback("initialize", recorder.initialize);
+			//ExternalInterface.addCallback("start", recorder.start);
+			//ExternalInterface.addCallback("stop", recorder.stop);
+		}
+		
+		function onEnterFrame(e:Event):void {
 			//ExternalInterface.call('flashLog', '<RecorderApi>: ENTER_FRAME)');
-			if (recorder.isListening()) {
-				//ExternalInterface.call('flashLog', '<Recorder>: Recording!');
-				jsUpdateRecorderStatus();
+			if (!recorder.isMuted()) {
+				ExternalInterface.call('flashRecorderGetVolume', recorder.getActivityLevel());
 			}
 		}
-			
-		private function registerListenersAndHandlers():void {
-			ExternalInterface.addCallback("jsFlashRecorderStart", startRecorder);
-			ExternalInterface.addCallback("jsFlashRecorderInitialize", initRecorder);
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			//trace('whatever')
+		
+		function onEnable(e) {
+			ExternalInterface.call('flashRecorderEnable');
 		}
 		
-		// JS Hooks into Recorder
-		
-		function initRecorder():void {
-			recorder.init();
-			ExternalInterface.call("flashLog", '<RecorderApi>: calling recorder.init()');
+		function onDisable(e) {
+			ExternalInterface.call('flashRecorderDisable');
 		}
-		
-		function startRecorder():void {
-			recorder.start();
-			ExternalInterface.call("flashLog", '<RecorderApi>: calling recorder.start()');
-		}
-		
-		
-		function stopRecorder():void {
-			recorder.stop();
-		}
-		
-		// AS3 Calls out ot JS
-		function jsUpdateRecorderStatus():void {
-			var data:Object = {'activityLevel': recorder.getStatus()};
-			trace(data);
-			ExternalInterface.call("flashRecorderStatus", data);
-		}
-		
 
 	}
 	
