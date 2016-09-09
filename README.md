@@ -11,7 +11,7 @@ open examples/get-volume.html
 
 ## API
 
-### Get Volume Level
+### Get Volume
 
 [Get Volume](https://mhotwagner.github.io/anachrony/examples/get-volume.html)
 
