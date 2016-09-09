@@ -4,6 +4,13 @@ A Flash audio recorder with javascript hooks ... because apparently it's still 2
 
 ## Quickstart
 
+```
+git clone git@github.com:mhotwagner/anachrony.git
+open examples/get-volume.html
+```
+
+## API
+
 ### Get Volume Level
 
 [Get Volume](https://mhotwagner.github.io/anachrony/examples/get-volume.html)
