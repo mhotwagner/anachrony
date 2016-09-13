@@ -1,4 +1,5 @@
 ﻿package {
+	import flash.utils.ByteArray;
 	import flash.display.Sprite;
 	import flash.media.Microphone;
 	import flash.media.SoundMixer;
@@ -14,6 +15,8 @@
 	import flash.external.ExternalInterface;
 	import flash.events.StatusEvent;
     import flash.media.Microphone;
+	
+	import Base64;
 	
 	public class Recorder extends Sprite {
 		
@@ -46,7 +49,9 @@
 			return muted;
 		}
 		
-		public function getOutput():
+		public function getDataURL():String {
+			return 'data:audio/wav;base64,' + Base64.encode(micRecorder.output);
+		}
 		
 		public function startRecording():void {
 			ExternalInterface.call('flashLog', 'Recorder.startRecording()');

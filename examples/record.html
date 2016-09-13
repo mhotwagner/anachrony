@@ -1,0 +1,61 @@
+<html>
+    <body>
+        <center>
+            <div id="flashContainer"></div>
+            <br/>
+            <button id="startRecordingButton">
+                Start Recording
+            </button>
+            <button id="stopRecordingButton" disabled>
+                Stop Recording
+            </button>
+            <br/>
+            <br/>
+            <audio id="audioPlayer" controls />
+        </center>
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script>
+        flashVars = {};
+        params = {allowScriptAccess: true};
+        attrs = {id: 'flashRecorder'};
+        swfobject.embedSWF(
+            "assets/anachrony.swf",
+            "flashContainer",
+            "300",
+            "300",
+            "10.0.0",
+            false,
+            flashVars,
+            params,
+            attrs,
+            successCallback
+        );
+
+        function flashLog(message) {
+            console.log('FLASH_RECORDER: ', message)
+        }
+
+        function successCallback(element) {
+            console.log('SUCCESS ', element);
+
+            flashRecorder = document.getElementById('flashRecorder');
+        }
+
+        document.getElementById('startRecordingButton').onclick = function(e) {
+            flashRecorder.startRecording();
+            this.setAttribute('disabled','disabled');
+            document.getElementById('stopRecordingButton').removeAttribute('disabled');
+        };
+
+        document.getElementById('stopRecordingButton').onclick = function(e) {
+            flashRecorder.stopRecording();
+            this.setAttribute('disabled', 'disabled');
+        };
+
+        function flashRecorderStoppedRecording(dataURL) {
+            document.getElementById('audioPlayer').src = dataURL;
+        }
+
+    </script>
+</html>

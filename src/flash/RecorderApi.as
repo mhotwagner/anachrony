@@ -17,14 +17,15 @@
 			
 		function registerEventListeners():void {
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			recorder.addEventListener('Recorder.Enabled', onEnable);
-			recorder.addEventListener('Recorder.Disabled', onDisable);
+			recorder.addEventListener('Recorder.enabled', onEnable);
+			recorder.addEventListener('Recorder.disabled', onDisable);
+			recorder.addEventListener('Recorder.stoppedRecording', onStoppedRecording);
 		}
 		
 		function registerJavascriptCallbacks():void {
 			//ExternalInterface.addCallback("initialize", recorder.initialize);
-			//ExternalInterface.addCallback("start", recorder.start);
-			//ExternalInterface.addCallback("stop", recorder.stop);
+			ExternalInterface.addCallback("startRecording", recorder.startRecording);
+			ExternalInterface.addCallback("stopRecording", recorder.stopRecording);
 		}
 		
 		function onEnterFrame(e:Event):void {
@@ -36,10 +37,17 @@
 		
 		function onEnable(e) {
 			ExternalInterface.call('flashRecorderEnable');
+			ExternalInterface.call('flashLog', 'flashRecorderEnable()');
 		}
 		
 		function onDisable(e) {
 			ExternalInterface.call('flashRecorderDisable');
+			ExternalInterface.call('flashLog', 'flashRecordDisable()');
+		}
+		
+		function onStoppedRecording(e) {
+			ExternalInterface.call('flashRecorderStoppedRecording', recorder.getDataURL());
+			ExternalInterface.call('flashLog', 'flashRecorderStoppedRecording');
 		}
 
 	}
