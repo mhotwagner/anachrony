@@ -21,7 +21,7 @@
 		private var recording:Boolean = false;
 		private var mic:Microphone;
 		private var wavEncoder:WaveEncoder = new WaveEncoder();
-		private var recorder:MicRecorder = new MicRecorder(wavEncoder);
+		private var micRecorder:MicRecorder = new MicRecorder(wavEncoder);
 		private var fileReference:FileReference = new FileReference();
 		
 		public function Recorder() {
@@ -46,24 +46,28 @@
 			return muted;
 		}
 		
-		/*public function start():void {
+		public function getOutput():
+		
+		public function startRecording():void {
+			ExternalInterface.call('flashLog', 'Recorder.startRecording()');
 			if (!recording) {
 				recording = true;
-				recorder.record();
+				micRecorder.record();
 			}
-		}*/
+		}
 		
-		/*public function stop():void {
+		public function stopRecording():void {
+			ExternalInterface.call('flashLog', 'Recorder.stopRecording()');
 			if (recording) {
 				recording = false;
-				recorder.stop();
+				micRecorder.stop();
 				mic.setLoopBack(false);
-				save();
+				dispatchEvent(new Event('Recorder.stoppedRecording', true));
 			}
-		}*/
+		}
 		
 		/*public function save(filename:String = 'recording'):void {
-			fileReference.save(recorder.output, filename + '.wav');
+			fileReference.save(micRecorder.output, filename + '.wav');
 		}*/
 		
 		/*public function isRecording():Boolean {
@@ -74,11 +78,11 @@
 			if (e.code == "Microphone.Unmuted"){
 				muted = false;
 				mic.removeEventListener(StatusEvent.STATUS, this._statusHandler);
-				dispatchEvent(new Event('Recorder.Enabled', true));
+				dispatchEvent(new Event('Recorder.enabled', true));
 			} else if (e.code == "Microphone.Muted") {
 				muted = true;
 				mic.removeEventListener(StatusEvent.STATUS, this._statusHandler);
-				dispatchEvent(new Event('Recorder.Disabled', true));
+				dispatchEvent(new Event('Recorder.disabled', true));
 			}
 		}
 		
