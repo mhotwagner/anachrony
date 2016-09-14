@@ -1,8 +1,9 @@
 <html>
+    <title>Anachrony - UpdateStatus</title>
     <body>
         <center>
             <div id="flashContainer"></div>
-            <h1>ACTIVITY LEVEL: <span id="volume">NO MICROPHONE AVAILABLE</span></h1>
+            <h1>VOLUME: <span id="volume">NO MICROPHONE AVAILABLE</span></h1>
         </center>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
@@ -22,8 +23,10 @@
             attrs
         );
 
-        function flashRecorderGetVolume(volume) {
-            document.getElementById('volume').innerHTML = volume.toString() + '%';
+        function flashRecorderUpdateStatus(data) {
+            if (!data.muted) {
+                document.getElementById('volume').innerHTML = data.volume.toString() + '%';
+            }
         }
     </script>
 </html>
