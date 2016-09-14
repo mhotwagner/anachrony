@@ -11,3 +11,7 @@ bin-release/
 
 .idea*
 examples/.idea*
+
+# Grunt
+package.json
+Gruntfile.js
