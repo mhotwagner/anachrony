@@ -4,6 +4,7 @@
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import Recorder;
+	import org.bytearray.micrecorder.events.RecordingEvent;
 	
 	public class RecorderApi extends MovieClip {
 		
@@ -16,40 +17,36 @@
 		}
 			
 		function registerEventListeners():void {
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
-			recorder.addEventListener('Recorder.enabled', onEnable);
-			recorder.addEventListener('Recorder.disabled', onDisable);
-			recorder.addEventListener('Recorder.stoppedRecording', onStoppedRecording);
+			recorder.addEventListener('Recorder.enabled', onRecorderEnabled);
+			recorder.addEventListener('Recorder.disabled', onRecorderDisabled);
+			recorder.addEventListener('Recorder.recording', onRecorderRecording);
+			recorder.addEventListener('Recorder.complete', onRecorderComplete);
 		}
 		
 		function registerJavascriptCallbacks():void {
-			//ExternalInterface.addCallback("initialize", recorder.initialize);
 			ExternalInterface.addCallback("startRecording", recorder.startRecording);
 			ExternalInterface.addCallback("stopRecording", recorder.stopRecording);
+			ExternalInterface.addCallback("getVolume", recorder.getActivityLevel);
 		}
 		
-		function onEnterFrame(e:Event):void {
-			//ExternalInterface.call('flashLog', '<RecorderApi>: ENTER_FRAME)');
-			if (!recorder.isMuted()) {
-				ExternalInterface.call('flashRecorderGetVolume', recorder.getActivityLevel());
-			}
+		
+		function onRecorderRecording(e:Event):void {
+			if (!recorder.isMuted()) ExternalInterface.call('flashRecorderGetVolume', recorder.getActivityLevel());
 		}
 		
-		function onEnable(e) {
+		function onRecorderEnabled(e:Event):void {
 			ExternalInterface.call('flashRecorderEnable');
-			ExternalInterface.call('flashLog', 'flashRecorderEnable()');
 		}
 		
-		function onDisable(e) {
+		function onRecorderDisabled(e:Event):void {
 			ExternalInterface.call('flashRecorderDisable');
-			ExternalInterface.call('flashLog', 'flashRecordDisable()');
 		}
 		
-		function onStoppedRecording(e) {
-			ExternalInterface.call('flashRecorderStoppedRecording', recorder.getDataURL());
-			ExternalInterface.call('flashLog', 'flashRecorderStoppedRecording');
+		function onRecorderComplete(e:Event):void {
+			var data:Object = {dataURL: recorder.getDataURL()}
+			ExternalInterface.call('flashRecorderStopRecording', data);
 		}
-
+		
 	}
 	
 }

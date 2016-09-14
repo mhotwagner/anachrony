@@ -3,10 +3,10 @@
         <center>
             <div id="flashContainer"></div>
             <br/>
-            <button id="startRecordingButton">
+            <button id="startRecordingButton" onclick="startRecording(this)" disabled>
                 Start Recording
             </button>
-            <button id="stopRecordingButton" disabled>
+            <button id="stopRecordingButton" onclick="stopRecording(this)" disabled>
                 Stop Recording
             </button>
             <br/>
@@ -16,46 +16,43 @@
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
     <script>
+        var flashRecorder;
+
         flashVars = {};
         params = {allowScriptAccess: true};
         attrs = {id: 'flashRecorder'};
         swfobject.embedSWF(
-            "assets/anachrony.swf",
-            "flashContainer",
-            "300",
-            "300",
-            "10.0.0",
-            false,
-            flashVars,
-            params,
-            attrs,
-            successCallback
-        );
+            "assets/anachrony.swf", "flashContainer", "300", "300", "10.0.0", false, flashVars, params, attrs, onSuccess);
+
+        function onSuccess(data) {
+            flashRecorder = data.ref;
+        }
+
+        function startRecording(button) {
+            flashRecorder.startRecording();
+            button.setAttribute('disabled','disabled');
+            document.getElementById('stopRecordingButton').removeAttribute('disabled');
+        }
+
+        function stopRecording(button) {
+            flashRecorder.stopRecording();
+            button.setAttribute('disabled', 'disabled');
+        }
+
+        // Flash Callback Handlers
+        function flashRecorderEnable() {
+            document.getElementById('startRecordingButton').removeAttribute('disabled');
+        }
+        function flashRecorderDisable() {
+            alert('WARNING: Microphone access not granted');
+        }
+        function flashRecorderStopRecording(data) {
+            document.getElementById('audioPlayer').src = data.dataURL;
+        }
 
         function flashLog(message) {
-            console.log('FLASH_RECORDER: ', message)
+            console.log('FLASH_LOG:');
+            console.log(message);
         }
-
-        function successCallback(element) {
-            console.log('SUCCESS ', element);
-
-            flashRecorder = document.getElementById('flashRecorder');
-        }
-
-        document.getElementById('startRecordingButton').onclick = function(e) {
-            flashRecorder.startRecording();
-            this.setAttribute('disabled','disabled');
-            document.getElementById('stopRecordingButton').removeAttribute('disabled');
-        };
-
-        document.getElementById('stopRecordingButton').onclick = function(e) {
-            flashRecorder.stopRecording();
-            this.setAttribute('disabled', 'disabled');
-        };
-
-        function flashRecorderStoppedRecording(dataURL) {
-            document.getElementById('audioPlayer').src = dataURL;
-        }
-
     </script>
 </html>
