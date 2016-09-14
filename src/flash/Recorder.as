@@ -17,11 +17,15 @@
     import flash.media.Microphone;
 	
 	import Base64;
+	import RecorderEvent;
 	
 	public class Recorder extends Sprite {
 		
 		private var muted:Boolean = true;
 		private var recording:Boolean = false;
+		private var time:int = 0;
+		private var duration:int = 0;
+		
 		private var mic:Microphone;
 		private var wavEncoder:WaveEncoder = new WaveEncoder();
 		private var micRecorder:MicRecorder = new MicRecorder(wavEncoder);
@@ -33,13 +37,28 @@
 			Security.showSettings("2");
 		}
 		
+		private function addEventListeners():void {
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			mic.addEventListener(StatusEvent.STATUS, onMicStatus, false, 0, true);
+			micRecorder.addEventListener(RecordingEvent.RECORDING, onRecording);
+			micRecorder.addEventListener(Event.COMPLETE, onComplete);			
+		}
+		
 		// Methods
 		public function isMuted():Boolean {
 			return muted;
 		}
 		
-		public function getActivityLevel():Number {
+		public function getActivityLevel():int {
 			return mic.activityLevel;
+		}
+		
+		public function getTime():int {
+			return this.time;
+		}
+		
+		public function getDuration():int {
+			return this.duration;
 		}
 		
 		public function getDataURL():String {
@@ -62,23 +81,30 @@
 		}
 		
 		// Event Handlers
+		private function onEnterFrame(e:Event):void {
+			var data:Object = {muted: this.muted, recording: this.recording, volume: mic.activityLevel};
+			if (this.time) data.time = this.time;
+			dispatchEvent(new RecorderEvent(RecorderEvent.STATUS, data, true));
+		}
+		
 		private function onRecording(e:RecordingEvent):void {
-			dispatchEvent(new Event('Recorder.recording', true));
+			var data:Object = {time: e.time, volume: mic.activityLevel};
+			dispatchEvent(new RecorderEvent(RecorderEvent.RECORDING, data, true));
 		}
 		
 		private function onComplete(e:Event):void {
-			dispatchEvent(new Event('Recorder.complete', true));
+			var data:Object = {};
+			dispatchEvent(new RecorderEvent(RecorderEvent.COMPLETE, data, true));
 		}
 		
 		private function onMicStatus(e:StatusEvent):void {
 			if (e.code == "Microphone.Unmuted"){
 				muted = false;
 				mic.removeEventListener(StatusEvent.STATUS, onMicStatus);
-				dispatchEvent(new Event('Recorder.enabled', true));
+				dispatchEvent(new RecorderEvent(RecorderEvent.ENABLED, true));
 			} else if (e.code == "Microphone.Muted") {
-				muted = true;
 				mic.removeEventListener(StatusEvent.STATUS, onMicStatus);
-				dispatchEvent(new Event('Recorder.disabled', true));
+				dispatchEvent(new RecorderEvent(RecorderEvent.DISABLED, true));
 			}
 		}
 		
@@ -96,12 +122,6 @@
 			mic.gain = 100;
 			mic.setLoopBack(true);
 			mic.setUseEchoSuppression(true); 
-		}
-		
-		private function addEventListeners():void {
-			mic.addEventListener(StatusEvent.STATUS, onMicStatus, false, 0, true);
-			micRecorder.addEventListener(RecordingEvent.RECORDING, onRecording);
-			micRecorder.addEventListener(Event.COMPLETE, onComplete);			
 		}
 		
 	}
