@@ -46,11 +46,11 @@
 		}
 		
 		function onRecorderStarted(e:RecorderEvent):void {
-			ExternalInterface.call('flashRecorderStarted');
+			ExternalInterface.call('flashRecorderStart');
 		}
 		
 		function onRecorderRecording(e:RecorderEvent):void {
-			ExternalInterface.call('flashRecorderGetVolume', e.data);
+			ExternalInterface.call('flashRecorderRecording', e.data);
 		}
 		
 		function onRecorderComplete(e:RecorderEvent):void {
