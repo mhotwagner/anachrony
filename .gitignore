@@ -15,3 +15,5 @@ examples/.idea*
 # Grunt
 package.json
 Gruntfile.js
+node_files/
+
