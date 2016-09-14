@@ -4,6 +4,7 @@
 	
 	public class RecorderEvent extends Event {
 		public static const STATUS:String = 'status';
+		public static const STARTED:String = 'started';
 		public static const RECORDING:String = 'recording';
 		public static const COMPLETE:String = 'complete';
 		public static const ENABLED:String = 'enabled';

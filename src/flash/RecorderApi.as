@@ -21,6 +21,7 @@
 			recorder.addEventListener(RecorderEvent.ENABLED, onRecorderEnabled);
 			recorder.addEventListener(RecorderEvent.DISABLED, onRecorderDisabled);
 			recorder.addEventListener(RecorderEvent.STATUS, onRecorderStatus);
+			recorder.addEventListener(RecorderEvent.STARTED, onRecorderStarted);
 			recorder.addEventListener(RecorderEvent.RECORDING, onRecorderRecording);
 			recorder.addEventListener(RecorderEvent.COMPLETE, onRecorderComplete);
 		}
@@ -31,20 +32,25 @@
 			ExternalInterface.addCallback("getVolume", recorder.getActivityLevel);
 		}
 		
-		function onRecorderStatus(e:RecorderEvent):void {
-			ExternalInterface.call('flashRecorderUpdateStatus', e.data);
-		}
-		
-		function onRecorderRecording(e:RecorderEvent):void {
-			//if (!recorder.isMuted()) ExternalInterface.call('flashRecorderGetVolume', e._params.volume);
-		}
-		
+		// Javascript Calls
 		function onRecorderEnabled(e:RecorderEvent):void {
 			ExternalInterface.call('flashRecorderEnable');
 		}
 		
 		function onRecorderDisabled(e:RecorderEvent):void {
 			ExternalInterface.call('flashRecorderDisable');
+		}
+		
+		function onRecorderStatus(e:RecorderEvent):void {
+			ExternalInterface.call('flashRecorderUpdateStatus', e.data);
+		}
+		
+		function onRecorderStarted(e:RecorderEvent):void {
+			ExternalInterface.call('flashRecorderStarted');
+		}
+		
+		function onRecorderRecording(e:RecorderEvent):void {
+			ExternalInterface.call('flashRecorderGetVolume', e.data);
 		}
 		
 		function onRecorderComplete(e:RecorderEvent):void {

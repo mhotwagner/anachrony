@@ -69,6 +69,7 @@
 			if (!recording) {
 				recording = true;
 				micRecorder.record();
+				dispatchEvent(new RecorderEvent(RecorderEvent.STARTED, {}, true));
 			}
 		}
 		
