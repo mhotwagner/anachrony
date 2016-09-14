@@ -7,11 +7,11 @@
 	import RecorderEvent;
 	import org.bytearray.micrecorder.events.RecordingEvent;
 	
-	public class RecorderApi extends MovieClip {
+	public class RecorderAPI extends MovieClip {
 		
 		private var recorder:Recorder;
 
-		public function RecorderApi(recorder:Recorder):void {
+		public function RecorderAPI(recorder:Recorder):void {
 			this.recorder = recorder;
 			registerEventListeners();
 			registerJavascriptCallbacks();

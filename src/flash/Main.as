@@ -1,17 +1,17 @@
 ﻿package {
 	
 	import Recorder;
-	import RecorderApi;
+	import RecorderAPI;
 	import flash.display.MovieClip;
 
 	public class Main extends MovieClip {
 		
 		var frame:Number = 0;
 		var recorder:Recorder = new Recorder();
-		var recorderApi:RecorderApi;
+		var recorderAPI:RecorderAPI;
 
 		public function Main() {
-			recorderApi = new RecorderApi(recorder);
+			recorderAPI = new RecorderAPI(recorder);
 		}
 		
 	}

@@ -95,7 +95,7 @@
 		private function onComplete(e:Event):void {
 			var data:Object = {
 				dataURL: this.getDataURL(),
-				duration: this.duration,
+				duration: this.duration
 			};
 			dispatchEvent(new RecorderEvent(RecorderEvent.COMPLETE, data, true));
 		}
