@@ -9,19 +9,19 @@
 		public static const ENABLED:String = 'enabled';
 		public static const DISABLED:String = 'disabled';
 		
-		public var _params:*;
+		public var data:*;
 		
-		public function RecorderEvent($type:String, $params=null, $bubbles:Boolean=false, $cancelable:Boolean=false) {
+		public function RecorderEvent($type:String, $data=null, $bubbles:Boolean=false, $cancelable:Boolean=false) {
 			super($type, $bubbles, $cancelable);
-			this._params = $params;
+			this.data = $data;
 		}
 		
 		public override function clone():Event {
-			return new RecorderEvent(type, this._params, bubbles, cancelable);
+			return new RecorderEvent(type, this.data, bubbles, cancelable);
 		}
 		
 		public override function toString():String {
-			return formatToString('RecorderEvent', '_params', 'type', 'bubbles', 'cancelable');
+			return formatToString('RecorderEvent', 'data', 'type', 'bubbles', 'cancelable');
 		}
 
 	}

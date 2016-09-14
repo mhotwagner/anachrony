@@ -32,7 +32,7 @@
 		}
 		
 		function onRecorderStatus(e:RecorderEvent):void {
-			ExternalInterface.call('flashRecorderUpdateStatus', e._params);
+			ExternalInterface.call('flashRecorderUpdateStatus', e.data);
 		}
 		
 		function onRecorderRecording(e:RecorderEvent):void {
@@ -48,7 +48,7 @@
 		}
 		
 		function onRecorderComplete(e:RecorderEvent):void {
-			ExternalInterface.call('flashRecorderStopRecording', e._params);
+			ExternalInterface.call('flashRecorderStopRecording', e.data);
 		}
 		
 	}
