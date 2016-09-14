@@ -1,51 +1,49 @@
 <html>
+    <title>Anachrony - Record</title>
     <body>
         <center>
+            <h1>STATUS: <span id="status">MICROPHONE NOT ENABLED</span></h1><br/>
+            <audio id="audioPlayer" controls></audio><br/>
             <div id="flashContainer"></div>
-            <br/>
-            <button id="startRecordingButton" onclick="startRecording(this)" disabled>
-                Start Recording
-            </button>
-            <button id="stopRecordingButton" onclick="stopRecording(this)" disabled>
-                Stop Recording
-            </button>
-            <br/>
-            <br/>
-            <audio id="audioPlayer" controls />
         </center>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
     <script>
         var flashRecorder;
 
+        // Flash Callback Handlers
+        function flashRecorderEnable() {
+            flashRecorder.startRecording();
+            setTimeout(flashRecorder.stopRecording, 5000);
+        }
+        function flashRecorderDisable() {
+            alert('WARNING: Microphone access not granted');
+            document.getElementById('status').innerHTML = 'MICROPHONE ACCESS DENIED';
+        }
+        function flashRecorderRecording(data) {
+            document.getElementById('status').innerHTML = 'RECORDING [TIME: ' + data.time / 1000 + ' SECONDS, VOLUME: ' + data.volume + '%]'
+        }
+        function flashRecorderStopRecording(data) {
+            document.getElementById('status').innerHTML = 'RECORDING COMPLETE';
+            document.getElementById('audioPlayer').src = data.dataURL;
+        }
+
         flashVars = {};
         params = {allowScriptAccess: true};
         attrs = {id: 'flashRecorder'};
         swfobject.embedSWF(
-            "assets/anachrony.swf", "flashContainer", "300", "300", "10.0.0", false, flashVars, params, attrs, onSuccess);
-
-        function onSuccess(data) {
-            flashRecorder = data.ref;
-            flashRecorder.
-            setTimeout(
-
-            )
-        }
-
-        // Flash Callback Handlers
-        function flashRecorderEnable() {
-            document.getElementById('startRecordingButton').removeAttribute('disabled');
-        }
-        function flashRecorderDisable() {
-            alert('WARNING: Microphone access not granted');
-        }
-        function flashRecorderStopRecording(data) {
-            document.getElementById('audioPlayer').src = data.dataURL;
-        }
-
-        function flashLog(message) {
-            console.log('FLASH_LOG:');
-            console.log(message);
-        }
+            "assets/anachrony.swf",
+            "flashContainer",
+            "300",
+            "300",
+            "10.0.0",
+            false,
+            flashVars,
+            params,
+            attrs,
+            function (data) {
+                flashRecorder = data.ref;
+            }
+        );
     </script>
 </html>
