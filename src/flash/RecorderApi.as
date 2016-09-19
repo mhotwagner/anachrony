@@ -29,7 +29,6 @@
 		function registerJavascriptCallbacks():void {
 			ExternalInterface.addCallback("startRecording", recorder.startRecording);
 			ExternalInterface.addCallback("stopRecording", recorder.stopRecording);
-			ExternalInterface.addCallback("getVolume", recorder.getActivityLevel);
 		}
 		
 		// Javascript Calls
