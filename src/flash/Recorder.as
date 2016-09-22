@@ -28,7 +28,7 @@
 		
 		private var mic:Microphone;
 		private var wavEncoder:WaveEncoder = new WaveEncoder();
-		private var micRecorder:MicRecorder = new MicRecorder(wavEncoder);
+		private var micRecorder:MicRecorder = new MicRecorder(wavEncoder, null, 100, 22);
 		private var fileReference:FileReference = new FileReference();
 		
 		public function Recorder() {

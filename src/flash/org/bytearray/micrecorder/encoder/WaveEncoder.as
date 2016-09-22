@@ -1,4 +1,4 @@
-package org.bytearray.micrecorder.encoder
+﻿package org.bytearray.micrecorder.encoder
 {
 	import flash.events.Event;
 	import flash.utils.ByteArray;
@@ -16,15 +16,20 @@ package org.bytearray.micrecorder.encoder
 		private var _bytes:ByteArray = new ByteArray();
 		private var _buffer:ByteArray = new ByteArray();
 		private var _volume:Number;
-		
+		private var _channels:int;
+		private var _bits:int;
+		private var _rate:int;
 		/**
 		 * 
 		 * @param volume
 		 * 
 		 */		
-		public function WaveEncoder( volume:Number=1 )
+		public function WaveEncoder( volume:Number=1, channels:int=1, bits:int=16, rate:int=22050 )
 		{
 			_volume = volume;
+			_channels = channels;
+			_bits = bits;
+			_rate = rate;
 		}
 		
 		/**
@@ -49,11 +54,11 @@ package org.bytearray.micrecorder.encoder
 			_bytes.writeUTFBytes( WaveEncoder.FMT );
 			_bytes.writeInt( uint( 16 ) );
 			_bytes.writeShort( uint( 1 ) );
-			_bytes.writeShort( channels );
-			_bytes.writeInt( rate );
-			_bytes.writeInt( uint( rate * channels * ( bits >> 3 ) ) );
-			_bytes.writeShort( uint( channels * ( bits >> 3 ) ) );
-			_bytes.writeShort( bits );
+			_bytes.writeShort( _channels );
+			_bytes.writeInt( _rate );
+			_bytes.writeInt( uint( _rate * _channels * ( _bits >> 3 ) ) );
+			_bytes.writeShort( uint( _channels * ( _bits >> 3 ) ) );
+			_bytes.writeShort( _bits );
 			_bytes.writeUTFBytes( WaveEncoder.DATA );
 			_bytes.writeInt( data.length );
 			_bytes.writeBytes( data );
