@@ -28,7 +28,7 @@
 		
 		private var mic:Microphone;
 		private var wavEncoder:WaveEncoder = new WaveEncoder();
-		private var micRecorder:MicRecorder = new MicRecorder(wavEncoder, null, 100, 22);
+		private var micRecorder:MicRecorder = new MicRecorder(wavEncoder, null, 75, 22);
 		private var fileReference:FileReference = new FileReference();
 		
 		public function Recorder() {
@@ -123,7 +123,7 @@
 			muteSpeakers();
 			mic = Microphone.getMicrophone();
 			mic.setSilenceLevel(0);
-			mic.gain = 100;
+			mic.gain = 75;
 			mic.setLoopBack(true);
 			mic.setUseEchoSuppression(true); 
 		}
