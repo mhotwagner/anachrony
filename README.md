@@ -2,6 +2,8 @@
 
 A Flash audio recorder with javascript hooks ... because apparently it's still 2008.
 
+Anachrony is a  Flash audio recorder app, exposed (almost) entirely over a JavaScript API. Unfortunately, we still have to handle security permissions allowing access to the microphone through the old Flash interface. Once access is granted, however, the functionality of the recorder can be driven and its data accessed entirely through JavaScript.  The API exposes two functions (startRecording and stopRecording) and a set of callbacks that can be implemented in your code to monitor status and retrieve data.
+
 ## Quickstart
 
 ```
